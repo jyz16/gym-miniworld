@@ -453,6 +453,9 @@ class MiniWorldEnv(gym.Env):
         # Done completing task
         done = 7
 
+        # move_upward = 8
+        # move_downward = 9
+
     def __init__(
         self,
         max_episode_steps=1500,
@@ -631,6 +634,33 @@ class MiniWorldEnv(gym.Env):
         self.agent.pos = next_pos
 
         return True
+
+    # def rise_agent(self, up_dist, up_drift):
+    #     """
+    #     Move the agent upward
+    #     """
+    #
+    #     next_pos = (
+    #         self.agent.pos +
+    #         self.agent.dir_vec * up_dist +
+    #         self.agent.right_vec * up_drift
+    #     )
+    #
+    #     if self.intersect(self.agent, next_pos, self.agent.radius):
+    #         return False
+    #
+    #     carrying = self.agent.carrying
+    #     if carrying:
+    #         next_carrying_pos = self._get_carry_pos(next_pos, carrying)
+    #
+    #         if self.intersect(carrying, next_carrying_pos, carrying.radius):
+    #             return False
+    #
+    #         carrying.pos = next_carrying_pos
+    #
+    #     self.agent.pos = next_pos
+    #
+    #     return True
 
     def turn_agent(self, turn_angle):
         """
