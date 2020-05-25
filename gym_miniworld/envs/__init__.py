@@ -17,6 +17,9 @@ from .putnext import *
 from .collecthealth import *
 from .simtorealgoto import *
 from .simtorealpush import *
+from .obstacleroom import *
+from .oneroomHard import *
+from .drone import *
 
 # Registered environment ids
 env_ids = []
@@ -49,6 +52,6 @@ def register_envs():
 
         env_ids.append(gym_id)
 
-        #print('Registered env:', gym_id)
+        print('Registered env:', gym_id)
 
 register_envs()

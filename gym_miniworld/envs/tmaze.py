@@ -17,7 +17,7 @@ class TMaze(MiniWorldEnv):
         self.goal_pos = goal_pos
 
         super().__init__(
-            max_episode_steps=280,
+            max_episode_steps=400,
             **kwargs
         )
 

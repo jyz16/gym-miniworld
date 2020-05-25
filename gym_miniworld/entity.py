@@ -438,7 +438,7 @@ class Agent(Entity):
         super().__init__()
 
         # Distance between the camera and the floor
-        self.cam_height = 1.5
+        self.cam_height = 0 #1.5
 
         # Camera up/down angles in degrees
         # Positive angles tilt the camera upwards

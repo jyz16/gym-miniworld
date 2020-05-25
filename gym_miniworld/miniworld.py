@@ -443,18 +443,18 @@ class MiniWorldEnv(gym.Env):
         move_forward = 2
         move_back = 3
 
+        move_upward = 4
+        move_downward = 5
+
         # Pick up or drop an object being carried
-        pickup = 4
-        drop = 5
+        pickup = 6
+        drop = 7
 
         # Toggle/activate an object
-        toggle = 6
+        toggle = 8
 
         # Done completing task
-        done = 7
-
-        # move_upward = 8
-        # move_downward = 9
+        done = 9
 
     def __init__(
         self,
@@ -635,32 +635,32 @@ class MiniWorldEnv(gym.Env):
 
         return True
 
-    # def rise_agent(self, up_dist, up_drift):
-    #     """
-    #     Move the agent upward
-    #     """
-    #
-    #     next_pos = (
-    #         self.agent.pos +
-    #         self.agent.dir_vec * up_dist +
-    #         self.agent.right_vec * up_drift
-    #     )
-    #
-    #     if self.intersect(self.agent, next_pos, self.agent.radius):
-    #         return False
-    #
-    #     carrying = self.agent.carrying
-    #     if carrying:
-    #         next_carrying_pos = self._get_carry_pos(next_pos, carrying)
-    #
-    #         if self.intersect(carrying, next_carrying_pos, carrying.radius):
-    #             return False
-    #
-    #         carrying.pos = next_carrying_pos
-    #
-    #     self.agent.pos = next_pos
-    #
-    #     return True
+    def rise_agent(self, up_dist, up_drift):
+        """
+        Move the agent upward
+        """
+
+        next_pos = (
+            self.agent.pos +
+            np.array([0, 1, 0]) * up_dist +
+            np.array([0, 1, 0]) * up_drift
+        )
+
+        if self.intersect(self.agent, next_pos, self.agent.radius):
+            return False
+
+        carrying = self.agent.carrying
+        if carrying:
+            next_carrying_pos = self._get_carry_pos(next_pos, carrying)
+
+            if self.intersect(carrying, next_carrying_pos, carrying.radius):
+                return False
+
+            carrying.pos = next_carrying_pos
+
+        self.agent.pos = next_pos
+
+        return True
 
     def turn_agent(self, turn_angle):
         """
@@ -694,7 +694,9 @@ class MiniWorldEnv(gym.Env):
 
         rand = self.rand if self.domain_rand else None
         fwd_step = self.params.sample(rand, 'forward_step')
+        up_step = self.params.sample(rand, 'forward_step')
         fwd_drift = self.params.sample(rand, 'forward_drift')
+        up_drift = self.params.sample(rand, 'forward_drift')
         turn_step = self.params.sample(rand, 'turn_step')
 
         if action == self.actions.move_forward:
@@ -708,6 +710,12 @@ class MiniWorldEnv(gym.Env):
 
         elif action == self.actions.turn_right:
             self.turn_agent(-turn_step)
+
+        elif action == self.actions.move_upward:
+            self.rise_agent(up_step, up_drift)
+
+        elif action == self.actions.move_downward:
+            self.rise_agent(-up_step, up_drift)
 
         # Pick up an object
         elif action == self.actions.pickup:
