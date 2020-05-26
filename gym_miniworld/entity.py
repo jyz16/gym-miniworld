@@ -437,9 +437,6 @@ class Agent(Entity):
     def __init__(self):
         super().__init__()
 
-        # Distance between the camera and the floor
-        self.cam_height = 0 #1.5
-
         # Camera up/down angles in degrees
         # Positive angles tilt the camera upwards
         self.cam_pitch = 0
@@ -451,6 +448,9 @@ class Agent(Entity):
         self.radius = 0.4
         self.height = 1.6
 
+        # Distance between the camera and the floor
+        self.cam_height = 0.1
+
         # Object currently being carried by the agent
         self.carrying = None
 
@@ -461,7 +461,7 @@ class Agent(Entity):
         """
 
         rot_y = gen_rot_matrix(Y_VEC, self.dir)
-        cam_disp = np.array([self.cam_fwd_disp, self.cam_height, 0])
+        cam_disp = np.array([self.cam_fwd_disp, 0, 0])
         cam_disp = np.dot(cam_disp, rot_y)
 
         return self.pos + cam_disp

@@ -20,6 +20,7 @@ from .simtorealpush import *
 from .obstacleroom import *
 from .oneroomHard import *
 from .drone import *
+from .dronehighceiling import *
 
 # Registered environment ids
 env_ids = []

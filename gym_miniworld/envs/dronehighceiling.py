@@ -5,7 +5,7 @@ from ..entity import Box
 from ..params import DEFAULT_PARAMS
 from gym import spaces
 
-class DroneEnv(MiniWorldEnv):
+class DroneHighCeiling(MiniWorldEnv):
     """
     Environment in which the goal is to go to a red box
     placed randomly in one big room.
@@ -29,11 +29,11 @@ class DroneEnv(MiniWorldEnv):
             max_x=self.size,
             min_z=0,
             max_z=self.size,
-            wall_height=2
+            wall_height=4
         )
 
         self.box = self.place_entity(Box(color='red'))
-        self.place_agent()
+        self.place_agent(max_y=1)
 
     def step(self, action):
         obs, reward, done, info = super().step(action)

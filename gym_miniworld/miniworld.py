@@ -646,6 +646,12 @@ class MiniWorldEnv(gym.Env):
             np.array([0, 1, 0]) * up_drift
         )
 
+        if next_pos[1] > self.rooms[0].wall_height:
+            next_pos[1] = self.rooms[0].wall_height - 0.1
+
+        if next_pos[1] < 0:
+            next_pos[1] = 0 + 0.1
+
         if self.intersect(self.agent, next_pos, self.agent.radius):
             return False
 
@@ -889,7 +895,9 @@ class MiniWorldEnv(gym.Env):
         min_x=None,
         max_x=None,
         min_z=None,
-        max_z=None
+        max_z=None,
+        min_y=None,
+        max_y=None
     ):
         """
         Place an entity/object in the world.
@@ -920,9 +928,13 @@ class MiniWorldEnv(gym.Env):
             hx = r.max_x if max_x == None else max_x
             lz = r.min_z if min_z == None else min_z
             hz = r.max_z if max_z == None else max_z
+            # Lower and upper bound for y
+            ly = 0 if min_y == None else min_y
+            hy = r.wall_height if max_y == None else max_y
+
             pos = self.rand.float(
-                low =[lx + ent.radius, 0, lz + ent.radius],
-                high=[hx - ent.radius, 0, hz - ent.radius]
+                low =[lx + ent.radius, ly + ent.height, lz + ent.radius],
+                high=[hx - ent.radius, hy - ent.height, hz - ent.radius]
             )
 
             # Make sure the position is within the room's outline
@@ -951,7 +963,9 @@ class MiniWorldEnv(gym.Env):
         min_x=None,
         max_x=None,
         min_z=None,
-        max_z=None
+        max_z=None,
+        min_y=None,
+        max_y=None
     ):
         """
         Place the agent in the environment at a random position
@@ -965,7 +979,9 @@ class MiniWorldEnv(gym.Env):
             min_x=min_x,
             max_x=max_x,
             min_z=min_z,
-            max_z=max_z
+            max_z=max_z,
+            min_y=min_y,
+            max_y=max_y
         )
 
     def intersect(self, ent, pos, radius):
@@ -996,7 +1012,7 @@ class MiniWorldEnv(gym.Env):
 
         return None
 
-    def near(self, ent0, ent1=None):
+    def near(self, ent0, ent1=None, near_const=1.1):
         """
         Test if the two entities are near each other.
         Used for "go to" or "put next" type tasks
@@ -1006,7 +1022,7 @@ class MiniWorldEnv(gym.Env):
             ent1 = self.agent
 
         dist = np.linalg.norm(ent0.pos - ent1.pos)
-        return dist < ent0.radius + ent1.radius + 1.1 * self.max_forward_step
+        return dist < ent0.radius + ent1.radius + near_const * self.max_forward_step
 
     def _load_tex(self, tex_name):
         """
