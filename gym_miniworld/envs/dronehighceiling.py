@@ -11,7 +11,7 @@ class DroneHighCeiling(MiniWorldEnv):
     placed randomly in one big room.
     """
 
-    def __init__(self, size=4.5, max_episode_steps=500, **kwargs):
+    def __init__(self, size=10, max_episode_steps=500, **kwargs):
         assert size >= 2
         self.size = size
 
@@ -29,10 +29,10 @@ class DroneHighCeiling(MiniWorldEnv):
             max_x=self.size,
             min_z=0,
             max_z=self.size,
-            wall_height=4
+            # wall_height=4
         )
 
-        self.box = self.place_entity(Box(color='red'), grounded=False)
+        self.box = self.place_entity(Box(color='red'), grounded=False, min_y=1.5)
         self.place_agent(max_y=1, grounded=False)
 
     def step(self, action):
