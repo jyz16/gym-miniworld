@@ -21,6 +21,7 @@ from .obstacleroom import *
 from .oneroomHard import *
 from .dronebigobs import *
 from .dronehighceiling import *
+from .dhcbigobs import *
 from .oneroombigobs import *
 
 # Registered environment ids
