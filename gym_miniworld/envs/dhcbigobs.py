@@ -17,8 +17,8 @@ class DroneHighCeilingBigObs(MiniWorldEnv):
 
         super().__init__(
             max_episode_steps=max_episode_steps,
-            obs_width=320,
-            obs_height=240,
+            obs_width=240,
+            obs_height=180,
             **kwargs
         )
 
