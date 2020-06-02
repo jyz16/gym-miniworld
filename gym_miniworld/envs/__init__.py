@@ -19,8 +19,9 @@ from .simtorealgoto import *
 from .simtorealpush import *
 from .obstacleroom import *
 from .oneroomHard import *
-from .drone import *
+from .dronebigobs import *
 from .dronehighceiling import *
+from .oneroombigobs import *
 
 # Registered environment ids
 env_ids = []
