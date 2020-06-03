@@ -521,6 +521,8 @@ class MiniWorldEnv(gym.Env):
             y = window_height - (self.obs_disp_height + 19)
         )
 
+        self.history = [] # For plotting the path
+
         # Initialize the state
         self.seed()
         self.reset()
@@ -942,6 +944,11 @@ class MiniWorldEnv(gym.Env):
                     low =[lx + ent.radius, ly + ent.height, lz + ent.radius],
                     high=[hx - ent.radius, hy - ent.height, hz - ent.radius]
                 )
+
+            if pos[1] > r.wall_height:
+                pos[1] = r.wall_height-0.1
+            if pos[1] < 0:
+                pos[1] = 0.1
 
             # Make sure the position is within the room's outline
             if not r.point_inside(pos):
