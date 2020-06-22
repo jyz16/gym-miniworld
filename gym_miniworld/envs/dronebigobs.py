@@ -8,7 +8,7 @@ from gym import spaces
 class DroneBigObs(MiniWorldEnv):
     """
     Environment in which the goal is to go to a red box
-    placed randomly in one big room.
+    placed randomly in one big room. With increased observation size (320*240).
     """
 
     def __init__(self, size=10, max_episode_steps=500, **kwargs):

@@ -5,7 +5,7 @@ from ..entity import Box
 from ..params import DEFAULT_PARAMS
 from gym import spaces
 
-class DroneDomRam(MiniWorldEnv):
+class DroneDomRand(MiniWorldEnv):
     """
     Environment in which the goal is to go to a red box
     placed randomly in one big room.
@@ -21,7 +21,7 @@ class DroneDomRam(MiniWorldEnv):
             **kwargs
         )
 
-        # Allow only movement actions (left/right/forward)
+        # Allow movement actions (left/right/forward/backward/upward/downward)
         self.action_space = spaces.Discrete(self.actions.move_forward+3)
 
     def _gen_world(self):
@@ -30,7 +30,6 @@ class DroneDomRam(MiniWorldEnv):
             max_x=self.size,
             min_z=0,
             max_z=self.size,
-            # wall_height=4
         )
 
         self.box = self.place_entity(Box(color='red'), grounded=False, min_y=1.5)

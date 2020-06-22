@@ -1128,7 +1128,9 @@ class MiniWorldEnv(gym.Env):
     def _render_world(
         self,
         frame_buffer,
-        render_agent
+        render_agent,
+        path=None,
+        dir=None
     ):
         """
         Render the world from a given camera position into a frame buffer,
@@ -1148,12 +1150,65 @@ class MiniWorldEnv(gym.Env):
         if render_agent:
             self.agent.render()
 
+        # if path:
+        #     for p in path:
+        #         print('hi')
+        #         a = Agent()
+        #         # a.color_vec = [1,0,0]
+        #         self.place_entity(a, pos=p)
+        #         # a.pos = p
+        #         # a.dir = 0
+        #         a.render()
+
         # Resolve the rendered image into a numpy array
         img = frame_buffer.resolve()
 
         return img
 
-    def render_top_view(self, frame_buffer=None):
+    def _render_path(
+        self,
+        frame_buffer,
+        render_agent,
+        path=None,
+        dir=None
+    ):
+        """
+        Render the world from a given camera position into a frame buffer,
+        and produce a numpy image array as output.
+        """
+
+        # Call the display list for the static parts of the environment
+        glCallList(1)
+
+        # TODO: keep the non-static entities in a different list for efficiency?
+        # Render the non-static entities
+        # for ent in self.entities:
+        #     if not ent.is_static and ent is not self.agent:
+        #         ent.render()
+        #         #ent.draw_bound()
+
+        # if render_agent:
+        #     self.agent.render()
+
+        if path:
+            for i, p in enumerate(path):
+                if i == 0:
+                    a = Box(color='red')
+                    a.color_vec = [1,0,0]
+                else:
+                    a = Agent()
+                    a.radius = 0.3
+                self.place_entity(a, pos=p, dir=dir[i])
+                # a.pos = p
+                # a.dir = 0
+                a.render()
+
+        # Resolve the rendered image into a numpy array
+        img = frame_buffer.resolve()
+
+        return img
+
+    def render_top_view(self, frame_buffer=None, path=None, dir=None):
         """
         Render a top view of the whole map (from above)
         """
@@ -1221,10 +1276,19 @@ class MiniWorldEnv(gym.Env):
         ]
         glLoadMatrixf((GLfloat * len(m))(*m))
 
-        return self._render_world(
-            frame_buffer,
-            render_agent=True
-        )
+        if path:
+            return self._render_path(
+                frame_buffer,
+                render_agent=False,
+                path=path,
+                dir=dir
+            )
+        else:
+            return self._render_world(
+                frame_buffer,
+                render_agent=True,
+                path=path
+            )
 
     def render_obs(self, frame_buffer=None):
         """
@@ -1383,7 +1447,7 @@ class MiniWorldEnv(gym.Env):
 
         return vis_objs
 
-    def render(self, mode='human', close=False, view='agent'):
+    def render(self, mode='human', close=False, view='agent', path=None, dir=None):
         """
         Render the environment for human viewing
         """
@@ -1398,7 +1462,8 @@ class MiniWorldEnv(gym.Env):
         if view == 'agent':
             img = self.render_obs(self.vis_fb)
         else:
-            img = self.render_top_view(self.vis_fb)
+            img = self.render_top_view(self.vis_fb, path=path, dir=dir)
+
         img_width = img.shape[1]
         img_height = img.shape[0]
 

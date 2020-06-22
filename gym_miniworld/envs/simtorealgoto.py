@@ -30,6 +30,8 @@ class SimToRealGoTo(MiniWorldEnv):
             max_episode_steps=100,
             params=sim_params,
             domain_rand=True,
+            obs_width=400,
+            obs_height=300,
             **kwargs
         )
 

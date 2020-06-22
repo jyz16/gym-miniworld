@@ -5,10 +5,11 @@ from ..entity import Box
 from ..params import DEFAULT_PARAMS
 from gym import spaces
 
-class DroneHighCeiling(MiniWorldEnv):
+class DroneEnv(MiniWorldEnv):
     """
     Environment in which the goal is to go to a red box
-    placed randomly in one big room.
+    placed randomly in one big room. This is a 3D environment,
+    the box and agent can be initialized at any height.
     """
 
     def __init__(self, size=10, max_episode_steps=500, **kwargs):
@@ -20,7 +21,7 @@ class DroneHighCeiling(MiniWorldEnv):
             **kwargs
         )
 
-        # Allow only movement actions (left/right/forward)
+        # Actions: left/right/forward/backward/upward/downward
         self.action_space = spaces.Discrete(self.actions.move_forward+3)
 
     def _gen_world(self):
@@ -29,10 +30,11 @@ class DroneHighCeiling(MiniWorldEnv):
             max_x=self.size,
             min_z=0,
             max_z=self.size,
-            # wall_height=4
         )
 
+        # Place a cube in the room that is not grounded
         self.box = self.place_entity(Box(color='red'), grounded=False, min_y=1.5)
+        # Place the agent anywhere in the room
         self.place_agent(max_y=1, grounded=False)
 
     def step(self, action):

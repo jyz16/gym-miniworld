@@ -20,9 +20,9 @@ from .simtorealpush import *
 from .obstacleroom import *
 from .oneroomHard import *
 from .dronebigobs import *
-from .dronehighceiling import *
+from .droneenv import *
 from .dhcbigobs import *
-from .dronedomram import *
+from .dronedomrand import *
 from .oneroombigobs import *
 
 # Registered environment ids

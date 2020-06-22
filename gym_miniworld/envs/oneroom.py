@@ -33,9 +33,11 @@ class OneRoom(MiniWorldEnv):
 
         self.box = self.place_entity(Box(color='red'))
         self.place_agent()
+        self.history.append(self.agent.pos)
 
     def step(self, action):
         obs, reward, done, info = super().step(action)
+        self.history.append(self.agent.pos)
 
         if self.near(self.box):
             reward += self._reward()

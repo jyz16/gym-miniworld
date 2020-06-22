@@ -9,7 +9,9 @@ class OneRoomHard(MiniWorldEnv):
     """
     Environment in which the goal is to go to a red box
     placed randomly in one big room. Penalty is awarded
-    for every step taken.
+    for every step taken. (Fix me: lead to unintended
+    agent behavior, agent does not move and rotates on
+    the spot)
     """
 
     def __init__(self, size=10, max_episode_steps=180, **kwargs):
@@ -42,6 +44,6 @@ class OneRoomHard(MiniWorldEnv):
             reward += self._reward()
             done = True
         else:
-            reward = (self._reward() - 1) * 10
+            reward = (self._reward() - 1) * 10 # Penalty given for every time step
 
         return obs, reward, done, info

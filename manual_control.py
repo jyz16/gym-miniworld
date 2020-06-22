@@ -14,12 +14,14 @@ from pyglet import clock
 import numpy as np
 import gym
 import gym_miniworld
+import csv
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--env-name', default='MiniWorld-Hallway-v0')
 parser.add_argument('--domain-rand', action='store_true', help='enable domain randomization')
 parser.add_argument('--no-time-limit', action='store_true', help='ignore time step limits')
 parser.add_argument('--top_view', action='store_true', help='show the top view instead of the agent view')
+parser.add_argument('--path-dir', default=None)
 args = parser.parse_args()
 
 env = gym.make(args.env_name)
@@ -33,8 +35,23 @@ view_mode = 'top' if args.top_view else 'agent'
 
 env.reset()
 
+path = None
+pos_data = []
+dir_data = []
+if args.path_dir:
+    with open(args.path_dir, newline='') as f:
+        reader = csv.reader(f)
+        data = list(reader)
+        pos_data = []
+        dir_data = []
+        for d in data:
+            int_data = [float(i) for i in d]
+            pos_data.append(int_data[:3])
+            dir_data.append(int_data[3])
+        pos_data = pos_data[::5]
+        dir_data = dir_data[::5]
 # Create the display window
-env.render('pyglet', view=view_mode)
+env.render('pyglet', view=view_mode, path=pos_data, dir=dir_data)
 
 def step(action):
     print('step {}/{}: {}'.format(env.step_count+1, env.max_episode_steps, env.actions(action).name))
@@ -96,7 +113,7 @@ def on_key_release(symbol, modifiers):
 
 @env.unwrapped.window.event
 def on_draw():
-    env.render('pyglet', view=view_mode)
+    env.render('pyglet', view=view_mode, path=pos_data, dir=dir_data)
 
 @env.unwrapped.window.event
 def on_close():
